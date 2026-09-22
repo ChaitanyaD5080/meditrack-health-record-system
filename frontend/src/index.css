@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-bg: #f6f8f7;
+  --color-surface: #ffffff;
+  --color-ink: #10241f;
+  --color-body: #52645d;
+  --color-primary: #1f6f5c;
+  --color-primary-dark: #144a3d;
+  --color-accent: #e8734a;
+  --color-border: #dee6e2;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-body);
+}
