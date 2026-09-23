@@ -3,6 +3,8 @@ import DashboardLayout from '../../components/common/DashboardLayout'
 import BookingModal from '../../components/patient/BookingModal'
 import { getDoctors } from '../../services/doctorService'
 
+const PAGE_SIZE = 2
+
 function DoctorCard({ doctor, onBook }) {
   const name = doctor.user?.name || 'Unknown Doctor'
   const initial = name.charAt(0).toUpperCase()
@@ -34,19 +36,47 @@ function DoctorCard({ doctor, onBook }) {
   )
 }
 
+function Pagination({ page, totalPages, onPrev, onNext }) {
+  if (totalPages <= 1) return null
+  return (
+    <div className="flex items-center justify-center gap-4 mt-8">
+      <button
+        onClick={onPrev}
+        disabled={page === 1}
+        className="px-4 py-2 text-sm font-medium text-primary border border-border rounded-lg hover:border-primary/40 disabled:text-body/40 disabled:hover:border-border disabled:cursor-not-allowed transition-colors"
+      >
+        &larr; Previous
+      </button>
+      <span className="text-sm text-body">
+        Page {page} of {totalPages}
+      </span>
+      <button
+        onClick={onNext}
+        disabled={page === totalPages}
+        className="px-4 py-2 text-sm font-medium text-primary border border-border rounded-lg hover:border-primary/40 disabled:text-body/40 disabled:hover:border-border disabled:cursor-not-allowed transition-colors"
+      >
+        Next &rarr;
+      </button>
+    </div>
+  )
+}
+
 function DoctorSearch() {
   const [doctors, setDoctors] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
   const [selectedDoctor, setSelectedDoctor] = useState(null)
   const [successMsg, setSuccessMsg] = useState('')
 
-  const fetchDoctors = async () => {
+  const fetchDoctors = async (searchTerm, pageNum) => {
     setLoading(true)
     try {
-      const res = await getDoctors()
-      setDoctors(res.data)
+      const res = await getDoctors({ search: searchTerm, page: pageNum, limit: PAGE_SIZE })
+      setDoctors(res.data.doctors)
+      setTotalPages(res.data.totalPages)
     } catch (err) {
       setError('Failed to load doctors')
     } finally {
@@ -55,17 +85,23 @@ function DoctorSearch() {
   }
 
   useEffect(() => {
-    fetchDoctors()
-  }, [])
+    fetchDoctors(search, page)
+  }, [page])
 
-  const filtered = doctors.filter((d) =>
-    (d.user?.name || '').toLowerCase().includes(search.toLowerCase())
-  )
+  // Reset to page 1 whenever the search term changes, then fetch
+  useEffect(() => {
+    if (page === 1) {
+      fetchDoctors(search, 1)
+    } else {
+      setPage(1)
+    }
+  }, [search])
 
   const handleBookingSuccess = () => {
     setSelectedDoctor(null)
     setSuccessMsg('Appointment booked successfully! Check your Appointments page.')
     setTimeout(() => setSuccessMsg(''), 5000)
+    fetchDoctors(search, page)
   }
 
   return (
@@ -94,15 +130,24 @@ function DoctorSearch() {
       {error && <p className="text-red-600">{error}</p>}
 
       {!loading && !error && (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.length === 0 ? (
-            <p className="text-body col-span-full">No doctors found.</p>
-          ) : (
-            filtered.map((doc) => (
-              <DoctorCard key={doc._id} doctor={doc} onBook={setSelectedDoctor} />
-            ))
-          )}
-        </div>
+        <>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {doctors.length === 0 ? (
+              <p className="text-body col-span-full">No doctors found.</p>
+            ) : (
+              doctors.map((doc) => (
+                <DoctorCard key={doc._id} doctor={doc} onBook={setSelectedDoctor} />
+              ))
+            )}
+          </div>
+
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPrev={() => setPage((p) => Math.max(1, p - 1))}
+            onNext={() => setPage((p) => Math.min(totalPages, p + 1))}
+          />
+        </>
       )}
 
       {selectedDoctor && (

@@ -168,17 +168,7 @@ function Profile() {
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-ink mb-1.5">Emergency Contact</label>
-          <input
-            type="text"
-            name="emergencyContact"
-            value={formData.emergencyContact}
-            onChange={handleChange}
-            placeholder="+91 98765 43210"
-            className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
-          />
-        </div>
+       
 
         <button
           type="submit"

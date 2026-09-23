@@ -16,12 +16,9 @@ export const getMyProfile = async (req, res) => {
 
 export const updateMyProfile = async (req, res) => {
   try {
-    const { age, dob, gender, bloodGroup, allergies, address, emergencyContact, name, phone } = req.body
+    const { age, dob, gender, bloodGroup, allergies, address, name, phone } = req.body
 
-    if (emergencyContact && emergencyContact.length < 10) {
-      return res.status(400).json({ message: 'Emergency contact must be at least 10 digits' })
-    }
-
+    
     const patient = await Patient.findOneAndUpdate(
       { user: req.user._id },
       { age, dob, gender, bloodGroup, allergies, address, emergencyContact },
