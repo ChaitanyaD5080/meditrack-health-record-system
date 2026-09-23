@@ -11,6 +11,7 @@ function Profile() {
     gender: '',
     bloodGroup: '',
     address: '',
+    emergencyContact: '',
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -28,6 +29,7 @@ function Profile() {
           gender: res.data.gender || '',
           bloodGroup: res.data.bloodGroup || '',
           address: res.data.address || '',
+          emergencyContact: res.data.emergencyContact || '',
         })
       } catch (err) {
         console.log('Profile fetch error:', err)
@@ -50,7 +52,7 @@ function Profile() {
       await updatePatientProfile(formData)
       setMessage('Profile updated successfully')
     } catch (err) {
-      setMessage('Failed to update profile')
+      setMessage(err.response?.data?.message || 'Failed to update profile')
     } finally {
       setSaving(false)
     }
@@ -163,6 +165,18 @@ function Profile() {
             onChange={handleChange}
             rows="3"
             className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition resize-none"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-ink mb-1.5">Emergency Contact</label>
+          <input
+            type="text"
+            name="emergencyContact"
+            value={formData.emergencyContact}
+            onChange={handleChange}
+            placeholder="+91 98765 43210"
+            className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
           />
         </div>
 

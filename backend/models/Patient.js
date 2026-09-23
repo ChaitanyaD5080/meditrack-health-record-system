@@ -14,6 +14,7 @@ const patientSchema = new mongoose.Schema(
     bloodGroup: { type: String, default: '' },
     allergies: [{ type: String }],
     address: { type: String, default: '' },
+    emergencyContact: { type: String, default: '' },
   },
   { timestamps: true }
 )
