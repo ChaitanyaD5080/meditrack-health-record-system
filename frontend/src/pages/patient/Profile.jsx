@@ -66,6 +66,9 @@ function Profile() {
     )
   }
 
+  const inputClass =
+    'w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition'
+
   return (
     <DashboardLayout>
       <p className="font-mono text-xs tracking-[0.15em] text-primary uppercase mb-2">
@@ -83,13 +86,7 @@ function Profile() {
       <form onSubmit={handleSubmit} className="bg-white border border-border rounded-2xl p-6 max-w-lg space-y-4">
         <div>
           <label className="block text-sm font-medium text-ink mb-1.5">Full name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
-          />
+          <input type="text" name="name" value={formData.name} onChange={handleChange} className={inputClass} />
         </div>
 
         <div>
@@ -100,7 +97,7 @@ function Profile() {
             value={formData.phone}
             onChange={handleChange}
             placeholder="+91 98765 43210"
-            className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+            className={inputClass}
           />
         </div>
 
@@ -114,7 +111,7 @@ function Profile() {
             min="0"
             max="120"
             placeholder="28"
-            className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+            className={inputClass}
           />
         </div>
 
@@ -126,21 +123,17 @@ function Profile() {
               name="dob"
               value={formData.dob}
               onChange={handleChange}
-              className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+              max={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10)}
+              className={inputClass}
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-ink mb-1.5">Gender</label>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
-            >
+            <select name="gender" value={formData.gender} onChange={handleChange} className={inputClass}>
               <option value="">Select</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
             </select>
           </div>
         </div>
@@ -153,7 +146,7 @@ function Profile() {
             value={formData.bloodGroup}
             onChange={handleChange}
             placeholder="O+"
-            className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+            className={inputClass}
           />
         </div>
 
@@ -164,11 +157,21 @@ function Profile() {
             value={formData.address}
             onChange={handleChange}
             rows="3"
-            className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition resize-none"
+            className={`${inputClass} resize-none`}
           />
         </div>
 
-       
+        <div>
+          <label className="block text-sm font-medium text-ink mb-1.5">Emergency contact</label>
+          <input
+            type="text"
+            name="emergencyContact"
+            value={formData.emergencyContact}
+            onChange={handleChange}
+            placeholder="Name - +91 98765 43210"
+            className={inputClass}
+          />
+        </div>
 
         <button
           type="submit"

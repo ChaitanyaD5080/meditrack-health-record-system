@@ -16,12 +16,12 @@ export const getMyProfile = async (req, res) => {
 
 export const updateMyProfile = async (req, res) => {
   try {
-    const { age, dob, gender, bloodGroup, allergies, address, name, phone } = req.body
+    const { age, dob, gender, bloodGroup, allergies, address, emergencyContact, name, phone } =
+      req.body
 
-    
     const patient = await Patient.findOneAndUpdate(
       { user: req.user._id },
-      { age, dob, gender, bloodGroup, allergies, address, emergencyContact },
+      { age, dob: dob || undefined, gender, bloodGroup, allergies, address, emergencyContact },
       { new: true }
     )
 

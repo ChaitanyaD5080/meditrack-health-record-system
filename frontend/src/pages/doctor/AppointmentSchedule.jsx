@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import DashboardLayout from '../../components/common/DashboardLayout'
 import { getAppointments } from '../../services/appointmentService'
 import api from '../../services/api'
+import { formatDate } from '../../utils/formatDate' 
 
 const STATUS_STYLES = {
   pending: 'bg-amber-50 text-amber-700 border-amber-200',
@@ -74,15 +75,9 @@ function AppointmentSchedule() {
                 className="bg-white border border-border rounded-2xl p-5 flex items-center justify-between flex-wrap gap-3"
               >
                 <div>
-                  <p className="font-medium text-ink">{appt.patient?.name}</p>
                   <p className="text-sm text-body mt-0.5">
-                    {new Date(appt.date).toLocaleDateString('en-US', {
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric',
-                    })}{' '}
-                    at {appt.time}
-                  </p>
+  {formatDate(appt.date)} at {appt.time}
+</p>
                   {appt.reason && (
                     <p className="text-xs text-body/70 mt-1 max-w-md">{appt.reason}</p>
                   )}

@@ -9,7 +9,7 @@ export const registerUser = async (req, res) => {
   try {
     const {
       name, email, password, role,
-      age, gender, bloodGroup, phone,
+      age, dob, gender, bloodGroup, phone, emergencyContact,
       specialization, experience, qualification,
     } = req.body
 
@@ -23,6 +23,10 @@ export const registerUser = async (req, res) => {
 
     if (!isStrongPassword(password)) {
       return res.status(400).json({ message: 'Password must be at least 6 characters' })
+    }
+
+    if (dob && new Date(dob) > new Date()) {
+      return res.status(400).json({ message: 'Date of birth cannot be in the future' })
     }
 
     const userExists = await User.findOne({ email })
@@ -45,8 +49,10 @@ export const registerUser = async (req, res) => {
       await Patient.create({
         user: user._id,
         age: age || undefined,
+        dob: dob || undefined,
         gender: gender || undefined,
         bloodGroup: bloodGroup || '',
+        emergencyContact: emergencyContact || '',
       })
     } else if (user.role === 'doctor') {
       await Doctor.create({

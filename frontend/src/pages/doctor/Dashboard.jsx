@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../components/common/DashboardLayout'
 import { useAuth } from '../../hooks/useAuth'
 import { getAppointments } from '../../services/appointmentService'
+import { formatDate } from '../../utils/formatDate'
 
 function StatCard({ label, value, sub }) {
   return (
@@ -69,7 +70,7 @@ function DoctorDashboard() {
                 <div>
                   <p className="text-sm font-medium text-ink">{appt.patient?.name}</p>
                   <p className="text-xs text-body">
-                    {new Date(appt.date).toLocaleDateString()} at {appt.time}
+                    {formatDate(appt.date)} at {appt.time}
                   </p>
                 </div>
                 <span className="text-xs text-body capitalize">{appt.status}</span>

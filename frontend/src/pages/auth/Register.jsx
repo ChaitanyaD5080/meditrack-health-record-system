@@ -13,6 +13,7 @@ function Register() {
     password: '',
     confirmPassword: '',
     phone: '',
+    dob: '',
     age: '',
     gender: '',
     bloodGroup: '',
@@ -48,6 +49,7 @@ function Register() {
       }
 
       if (role === 'patient') {
+        payload.dob = formData.dob
         payload.age = formData.age
         payload.gender = formData.gender
         payload.bloodGroup = formData.bloodGroup
@@ -172,6 +174,20 @@ function Register() {
 
             {role === 'patient' && (
               <>
+                <div>
+                  <label className="block text-sm font-medium text-ink mb-1.5">Date of Birth</label>
+                  <input
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
+                    required
+                    max={new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                      .toISOString()
+                      .slice(0, 10)}
+                    className="w-full px-4 py-2.5 border border-border rounded-lg text-ink focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+                  />
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-ink mb-1.5">Age</label>
                   <input

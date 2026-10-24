@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import DashboardLayout from '../../components/common/DashboardLayout'
 import BookingModal from '../../components/patient/BookingModal'
 import { getDoctors } from '../../services/doctorService'
@@ -71,7 +71,7 @@ function DoctorSearch() {
   const [selectedDoctor, setSelectedDoctor] = useState(null)
   const [successMsg, setSuccessMsg] = useState('')
 
-  const fetchDoctors = async (searchTerm, pageNum) => {
+  const fetchDoctors = useCallback(async (searchTerm, pageNum) => {
     setLoading(true)
     try {
       const res = await getDoctors({ search: searchTerm, page: pageNum, limit: PAGE_SIZE })
@@ -82,20 +82,19 @@ function DoctorSearch() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  const prevSearchRef = useRef(search)
 
   useEffect(() => {
-    fetchDoctors(search, page)
-  }, [page])
-
-  // Reset to page 1 whenever the search term changes, then fetch
-  useEffect(() => {
-    if (page === 1) {
-      fetchDoctors(search, 1)
-    } else {
+    if (prevSearchRef.current !== search) {
+      prevSearchRef.current = search
       setPage(1)
+      return
     }
-  }, [search])
+
+    fetchDoctors(search, page)
+  }, [fetchDoctors, search, page])
 
   const handleBookingSuccess = () => {
     setSelectedDoctor(null)

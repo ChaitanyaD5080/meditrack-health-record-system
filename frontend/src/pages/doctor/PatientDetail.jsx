@@ -4,6 +4,7 @@ import DashboardLayout from '../../components/common/DashboardLayout'
 import { getPatientRecords } from '../../services/recordService'
 import { getPatientProfileById } from '../../services/patientService'
 import { getPatientPrescriptions } from '../../services/prescriptionService'
+import { formatDate } from '../../utils/formatDate'
 
 function DoctorPatientDetail() {
   const { id } = useParams()
@@ -73,6 +74,10 @@ function DoctorPatientDetail() {
               <p className="text-ink font-medium">{profile.age || '—'}</p>
             </div>
             <div>
+              <p className="text-xs text-body uppercase font-mono mb-1">Date of birth</p>
+              <p className="text-ink font-medium">{formatDate(profile.dob)}</p>
+            </div>
+            <div>
               <p className="text-xs text-body uppercase font-mono mb-1">Gender</p>
               <p className="text-ink font-medium capitalize">{profile.gender || '—'}</p>
             </div>
@@ -92,6 +97,7 @@ function DoctorPatientDetail() {
               <p className="text-xs text-body uppercase font-mono mb-1">Address</p>
               <p className="text-ink font-medium">{profile.address || '—'}</p>
             </div>
+            
           </div>
         </div>
       )}
@@ -107,9 +113,7 @@ function DoctorPatientDetail() {
             <div key={rx._id} className="bg-white border border-border rounded-2xl p-5">
               <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
                 <p className="font-medium text-ink">{rx.condition?.diagnosis}</p>
-                <p className="text-xs text-body">
-                  {new Date(rx.date).toLocaleDateString()}
-                </p>
+                <p className="text-xs text-body">{formatDate(rx.date)}</p>
               </div>
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-body mb-3">
                 {rx.condition?.bloodPressure && <span>BP: {rx.condition.bloodPressure}</span>}
@@ -141,13 +145,7 @@ function DoctorPatientDetail() {
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div>
                   <p className="font-medium text-ink">{rec.diagnosis || 'Untitled record'}</p>
-                  <p className="text-xs text-body mt-0.5">
-                    {new Date(rec.date).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
-                  </p>
+                  <p className="text-xs text-body mt-0.5">{formatDate(rec.date)}</p>
                 </div>
                 {rec.attachments?.[0] && (
                   <a
